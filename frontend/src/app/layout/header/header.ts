@@ -20,6 +20,11 @@ export class Header {
         this.navigate.set_switch('main');
     }
 
+public navigate_to_main(): void {
+        this.navigate.set_switch('main');
+    }
+
+
     public set_btn(type: BtnTypes): BtnTypes {
         return type;
     }

@@ -1,6 +1,6 @@
 import {Component, input, InputSignal} from '@angular/core';
 
-export type BtnTypes = "search" | "info";
+export type BtnTypes = "search" | "info" | 'arrow-back' | 'edit';
 
 @Component({
   imports: [],

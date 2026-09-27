@@ -1,9 +1,18 @@
 <section aria-labelledby="header-headline">
-    <header>
-        <h1 id="header-headline">Notizen</h1>
-    </header>
-    <main>
-        <app-btn-header [setBtnType]="set_btn('search')"></app-btn-header>
-        <app-btn-header [setBtnType]="set_btn('info')"></app-btn-header>
-    </main>
+    @if (switch() == 'main') {
+        <header>
+            <h1 id="header-headline">Notizen</h1>
+        </header>
+        <main>
+            <app-btn-header [setBtnType]="set_btn('search')"></app-btn-header>
+            <app-btn-header [setBtnType]="set_btn('info')"></app-btn-header>
+        </main>
+    } @else if (switch() == 'editor') {
+        <header>
+            <app-btn-header [setBtnType]="set_btn('arrow-back')" (click)="navigate_to_main()"></app-btn-header>
+        </header>
+        <main>
+            <app-btn-header [setBtnType]="set_btn('edit')"></app-btn-header>
+        </main>
+    }
 </section>

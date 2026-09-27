@@ -2,5 +2,5 @@ section {
     background-color: blue;
     margin-top: 80px;
     padding: 24px 16px;
-    height: 100vh;
+    height: calc(100vh - 80px);
 }

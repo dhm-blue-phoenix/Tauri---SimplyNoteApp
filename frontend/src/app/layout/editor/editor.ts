@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Backend } from '../../shared/services/backend';
 
 @Component({
   imports: [],
@@ -7,4 +8,6 @@ import { Component } from '@angular/core';
   templateUrl: './editor.html',
 })
 export class Editor {
+  private backend: Backend = inject(Backend);
+  
 }

@@ -10,8 +10,7 @@ import { Navigate } from '../../../services/navigate';
 export class BtnAdd {
   private navigate = inject(Navigate);
 
-  public navigateToEditor(): void {
-    console.debug("DEBUG", "Navigating to editor...");
+  public navigate_to_editor(): void {
     this.navigate.set_switch('editor');
   }
 }
