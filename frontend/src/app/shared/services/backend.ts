@@ -1,12 +1,13 @@
-import { Service, signal } from '@angular/core';
+import { Service, Signal, signal, WritableSignal } from '@angular/core';
 import { environment } from '../../enviroment/enviroment';
-import { Note, Notes, Endpoint, BackendResult } from '../interfaces/backend';
+import { Note, Notes, Endpoint, BackendResult } from '../interfaces/services/backend';
 
 
 @Service()
 export class Backend {
     private readonly url: RequestInfo = `${environment.BACKEND_URL}/api/`;
-    public readonly notes = signal<Note[] | []>([]);
+    private readonly _notes: WritableSignal<Note[] | []> = signal<Note[] | []>([]);
+    public readonly notes: Signal<Note[] | []> = this._notes.asReadonly();
 
     constructor() {
         //this.testing();
@@ -35,7 +36,7 @@ export class Backend {
                 method: 'GET'
             });
             const result: Notes = await resp.json();
-            this.notes.set(result);
+            this._notes.set(result);
             return {
                 is_ok: resp.ok,
                 status: resp.status,

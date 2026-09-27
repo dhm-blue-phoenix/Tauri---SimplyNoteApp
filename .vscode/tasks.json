@@ -1,0 +1,66 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "cargo: start backend",
+            "type": "shell",
+            "command": "cargo",
+            "args": [
+                "run"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/backend"
+            },
+            "isBackground": true,
+            "problemMatcher": {
+                "owner": "rust",
+                "pattern": {
+                    "regexp": "^$"
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": ".*",
+                    "endsPattern": "Server leuft auf http://.*"
+                }
+            }
+        },
+        {
+            "type": "npm",
+            "options": {
+                "cwd": "${workspaceFolder}/frontend"
+            },
+            "script": "start",
+            "isBackground": true,
+            "problemMatcher": {
+                "owner": "angular",
+                "pattern": {
+                    "regexp": "^$"
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "Application bundle generation started",
+                    "endsPattern": "Local:.*http://localhost:1420/"
+                }
+            },
+            "label": "npm: start frontend"
+        },
+        {
+            "label": "debug: start App",
+            "type": "shell",
+            "command": "printf",
+            "args": [
+                "%s",
+                "${command:workbench.action.debug.start}"
+            ],
+            "problemMatcher": [],
+            "dependsOn": [
+                "cargo: start backend",
+                "npm: start frontend"
+            ],
+            "dependsOrder": "sequence",
+            "runOptions": {
+                "runOn": "folderOpen"
+            }
+        }
+    ]
+}

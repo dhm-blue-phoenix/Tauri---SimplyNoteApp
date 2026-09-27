@@ -1,0 +1,14 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            // Starte das Projekt Local und öffne den internen Browser von VS Code
+            "type": "editor-browser",
+            "request": "launch",
+            "name": "Starte Browser App",
+            "url": "http://localhost:1420",
+            "webRoot": "${workspaceFolder}/frontend",
+            "preLaunchTask": "npm: start frontend"
+        }
+    ]
+}

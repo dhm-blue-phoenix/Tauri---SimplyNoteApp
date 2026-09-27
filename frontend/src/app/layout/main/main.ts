@@ -1,5 +1,5 @@
-import {Component, inject, WritableSignal, computed} from '@angular/core';
-import {Note} from '../../shared/interfaces/backend';
+import {Component, inject, computed, Signal} from '@angular/core';
+import {Notes} from '../../shared/interfaces/services/backend';
 import {Backend} from '../../shared/services/backend';
 import {BtnAdd} from '../../shared/components/btn/btn-add/btn-add';
 
@@ -10,12 +10,12 @@ import {BtnAdd} from '../../shared/components/btn/btn-add/btn-add';
     templateUrl: './main.html',
 })
 export class Main {
-    private backend = inject(Backend);
-    public notes: WritableSignal<[] | Note[]> = this.backend.notes;
+    private backend: Backend = inject(Backend);
+    public notes: Signal<[] | Notes> = this.backend.notes;
 
     async ngOnInit(): Promise<void> {
         await this.backend.load_notes();
-        const notes = computed(() => this.notes());
+        const notes: Signal<[] | Notes> = computed(() => this.notes());
         console.debug("DEBUG", notes());
     }
 }
