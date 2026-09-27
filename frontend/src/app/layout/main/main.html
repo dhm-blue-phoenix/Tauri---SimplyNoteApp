@@ -1,14 +1,15 @@
 <section>
-    @if (notes.length > 1) {
+    @if (notes().length > 1) {
         <div>
             <!-- Notizen Liste -->
             <ul>
-                <li>AB</li>
-                <li>AB</li>
-                <li>AB</li>
-                <li>AB</li>
-                <li>AB</li>
-                <li>AB</li>
+                @for (note of notes(); track note.id) {
+                    <li>
+                        <div class="note">
+                            <span>{{ note.title }}</span>
+                        </div>
+                    </li>
+                }
             </ul>
         </div>
     } @else {
@@ -17,4 +18,5 @@
             <span>Erstelle deine Erste Notiz!</span>
         </div>
     }
+    <app-btn-add></app-btn-add>
 </section>

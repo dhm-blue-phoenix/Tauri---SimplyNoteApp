@@ -1,31 +1,15 @@
-import { Service } from '@angular/core';
+import { Service, signal } from '@angular/core';
 import { environment } from '../../enviroment/enviroment';
+import { Note, Notes, Endpoint, BackendResult } from '../interfaces/backend';
 
-
-type NoteStatus = "notes" | "trash";
-type Notes = Note[];
-interface Note {
-    id: string,
-    title: String,
-    content: String,
-    status: NoteStatus,
-    created_at: String,
-}
-
-type Endpoint = "notes" | "note";
-
-interface BackendResult {
-    is_ok: boolean,
-    status: "error" | number,
-    content: unknown
-}
 
 @Service()
 export class Backend {
-    private readonly BACKEND_URLS: RequestInfo = environment.BACKEND_URL + "/api/";
+    private readonly url: RequestInfo = `${environment.BACKEND_URL}/api/`;
+    public readonly notes = signal<Note[] | []>([]);
 
     constructor() {
-        this.testing();
+        //this.testing();
     }
 
     /*
@@ -35,17 +19,23 @@ export class Backend {
     private async testing(): Promise<void> {
         const data: BackendResult = await this.get_data('notes');
         const data2: BackendResult = await this.get_data('note');
-        console.log(data);
-        console.log(data2);
+        console.debug(data);
+        console.debug(data2);
+    }
+
+    public async load_notes() {
+        const data: BackendResult = await this.get_data('notes');
+        console.debug(data);
     }
 
     private async get_data(endpoint: Endpoint): Promise<BackendResult> {
-        const url: RequestInfo = `${this.BACKEND_URLS}${endpoint}`;
+        const url: RequestInfo = `${this.url}${endpoint}`;
         try {
             const resp: Response = await fetch(url, {
                 method: 'GET'
             });
             const result: Notes = await resp.json();
+            this.notes.set(result);
             return {
                 is_ok: resp.ok,
                 status: resp.status,

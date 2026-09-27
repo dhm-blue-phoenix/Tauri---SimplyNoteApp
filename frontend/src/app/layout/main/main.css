@@ -1,7 +1,7 @@
 section {
+    margin-top: 80px;
     background-color: var(--bg-color);
     height: calc(100vh - 60px - (16px * 2));
-    overflow: hidden;
 }
 
 .firstNotiz {
@@ -9,4 +9,24 @@ section {
     justify-content: center;
     align-items: center;
     height: 100%;
+}
+
+ul {
+    list-style-type: none;
+    padding: 16px;
+    margin: 0;
+}
+
+.note {
+    background-color: red;
+    margin: 16px 0;
+    border-radius: 8px;
+    padding: 24px 32px;
+    min-height: 100px;
+    min-width: 300px;
+}
+
+.note > span {
+    font-size: 24px;
+    font-weight: 500;
 }

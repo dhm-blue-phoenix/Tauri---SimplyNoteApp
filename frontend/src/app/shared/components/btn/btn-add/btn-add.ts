@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   imports: [],
@@ -7,4 +8,10 @@ import { Component } from '@angular/core';
   templateUrl: './btn-add.html',
 })
 export class BtnAdd {
+  private router = inject(Router);
+
+  public navigateToEditor() {
+    console.log('Navigating to editor...');
+    this.router.navigate(['editor']);
+  }
 }
