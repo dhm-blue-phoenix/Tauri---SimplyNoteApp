@@ -1,8 +1,9 @@
 import {Component, computed, inject, Signal} from '@angular/core';
 
-import {BtnHeader, BtnTypes} from '../../shared/components/btn/btn-header/btn-header';
+import {BtnHeader} from '../../shared/components/btn/btn-header/btn-header';
 import {Navigate} from '../../shared/services/navigate';
 import { Switch } from '../../shared/interfaces/services/navigate';
+import { BtnTypes } from '../../shared/interfaces/components/btn';
 
 @Component({
     imports: [BtnHeader],

@@ -1,4 +1,13 @@
-type Endpoint = "notes" | "note";
+type Endpoint = "notes";
+
+type Method = "GET" | "POST" | "PATCH" | "DELETE";
+
+interface RequestData {
+    method: Method,
+    endpoint: Endpoint,
+    id?: string,
+    body?: unknown
+}
 
 interface BackendResult {
     is_ok: boolean,
@@ -23,5 +32,7 @@ export type {
     Notes,
     NoteStatus,
     Endpoint,
-    BackendResult
+    Method,
+    BackendResult,
+    RequestData
 };

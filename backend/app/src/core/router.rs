@@ -1,4 +1,4 @@
-use axum::http::{HeaderValue, StatusCode, Uri};
+use axum::http::{header, HeaderValue, Method, StatusCode, Uri};
 use axum::routing::get;
 use axum::{Json, Router};
 use serde::Serialize;
@@ -14,7 +14,9 @@ pub fn router() -> Router<AppState> {
         .fallback(fallback)
         .layer(
             CorsLayer::new()
-                .allow_origin(HeaderValue::from_static("http://localhost:1420")),
+                .allow_origin(HeaderValue::from_static("http://localhost:1420"))
+                .allow_methods([Method::GET, Method::POST, Method::PATCH, Method::DELETE])
+                .allow_headers([header::CONTENT_TYPE]),
         )
 }
 
