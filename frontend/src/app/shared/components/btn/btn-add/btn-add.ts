@@ -11,6 +11,6 @@ export class BtnAdd {
   private navigate = inject(Navigate);
 
   public navigate_to_editor(): void {
-    this.navigate.set_switch('editor');
+    this.navigate.set_switch('editor', '');
   }
 }

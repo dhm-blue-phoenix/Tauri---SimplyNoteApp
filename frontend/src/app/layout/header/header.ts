@@ -1,7 +1,7 @@
-import {Component, computed, inject, Signal} from '@angular/core';
+import { Component, computed, inject, Signal } from '@angular/core';
 
-import {BtnHeader} from '../../shared/components/btn/btn-header/btn-header';
-import {Navigate} from '../../shared/services/navigate';
+import { BtnHeader } from '../../shared/components/btn/btn-header/btn-header';
+import { Navigate } from '../../shared/services/navigate';
 import { Switch } from '../../shared/interfaces/services/navigate';
 import { BtnTypes } from '../../shared/interfaces/components/btn';
 
@@ -17,12 +17,12 @@ export class Header {
 
     ngOnInit(): void {
         const switch_value: Signal<Switch> = computed(() => this.switch());
-        console.debug("DEBUG", switch_value());
-        this.navigate.set_switch('main');
+        console.debug('DEBUG', switch_value());
+        this.navigate.set_switch('main', '');
     }
 
-public navigate_to_main(): void {
-        this.navigate.set_switch('main');
+    public navigate_to_main(): void {
+        this.navigate.set_switch('main', '');
     }
 
 

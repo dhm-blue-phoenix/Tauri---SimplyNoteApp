@@ -1,6 +1,31 @@
 section {
-    background-color: blue;
     margin-top: 80px;
     padding: 24px 16px;
     height: calc(100vh - 80px);
+    color: var(--text-color-show);
+}
+
+.note_content {
+    height: 100%;
+    padding: 16px 0;
+}
+
+.note_content header {
+    padding: 16px 0;
+}
+
+.note_content main {
+    padding-top: 16px;
+    font-size: larger;
+    font-weight: bold;
+}
+
+.no_note_content {
+    height: 100%;
+    display: flex;
+    font-size: larger;
+    line-height: 40px;
+    text-align: center;
+    align-items: center;
+    color: brown;
 }

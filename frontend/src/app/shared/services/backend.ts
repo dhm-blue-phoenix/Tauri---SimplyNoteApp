@@ -6,8 +6,12 @@ import { Note, Notes, Method, BackendResult, RequestData } from '../interfaces/s
 @Service()
 export class Backend {
     private readonly url: RequestInfo = `${environment['BACKEND_URL']}/api/`;
-    private readonly _notes: WritableSignal<Note[] | []> = signal<Note[] | []>([]);
-    public readonly notes: Signal<Note[] | []> = this._notes.asReadonly();
+    
+    private readonly _notes: WritableSignal<Notes> = signal<Notes>([]);
+    public readonly notes: Signal<Notes> = this._notes.asReadonly();
+
+    private readonly _note: WritableSignal<Note | null> = signal<Note | null>(null);
+    public readonly note: Signal<Note | null> = this._note.asReadonly();
 
     constructor() {
         this.testing();
@@ -20,16 +24,21 @@ export class Backend {
     private async testing(): Promise<void> {
     }
 
-    public async load_notes(): Promise<void | BackendResult> {
+    public async load_notes(): Promise<BackendResult> {
         const request_data: RequestData = {
-            method: "GET",
-            endpoint: "notes"
+            method: 'GET',
+            endpoint: 'notes'
         };
-        const result: void | BackendResult = await this.request(request_data);
+        const result: BackendResult = await this.request(request_data);
         
         if (!result['is_ok']) throw new Error(`Backend Error: ${result['status']}`);
         
         return result;
+    }
+
+    public async load_note(id: string): Promise<void> {
+        let note: Note | undefined = this.notes().find(note => note.id === id);
+        this._note.set(note ?? null);
     }
 
     public async add_note() {}
@@ -43,6 +52,7 @@ export class Backend {
         try {
             const resp: Response = await fetch(url, this.return_request_data(request_data['method'], request_data['body']));
             const result: Notes = await resp.json();
+            this._notes.set(result);
             return {
                 is_ok: resp.ok,
                 status: resp.status,
@@ -51,7 +61,7 @@ export class Backend {
         } catch (error) {
             return {
                 is_ok: false,
-                status: "error",
+                status: 'error',
                 content: error
             };
         }

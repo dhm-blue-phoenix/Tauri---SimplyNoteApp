@@ -1,6 +1,6 @@
-type Endpoint = "notes";
+type Endpoint = 'notes';
 
-type Method = "GET" | "POST" | "PATCH" | "DELETE";
+type Method = 'GET' | 'POST' | 'PATCH' | 'DELETE';
 
 interface RequestData {
     method: Method,
@@ -11,11 +11,11 @@ interface RequestData {
 
 interface BackendResult {
     is_ok: boolean,
-    status: "error" | number,
+    status: 'error' | number,
     content: unknown
 }
 
-type NoteStatus = "notes" | "trash";
+type NoteStatus = 'notes' | 'trash';
 
 interface Note {
     id: string,

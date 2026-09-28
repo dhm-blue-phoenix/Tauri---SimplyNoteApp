@@ -1,4 +1,4 @@
-import { Routes } from "@angular/router";
+import { Routes } from '@angular/router';
 import { Main } from './layout/main/main';
 import { Show } from './layout/show/show';
 import { Editor } from './layout/editor/editor';

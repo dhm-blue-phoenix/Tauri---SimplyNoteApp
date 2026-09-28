@@ -1,8 +1,18 @@
 <section>
-    <header>
-        <h1>Show</h1>
-    </header>
-    <main>
-        <p>This is the show content.</p>
-    </main>
+    @if (note(); as currentNote) {
+    <div class="note_content">
+        <header>
+            <h1>{{ currentNote.title || 'Gebe einen Titel an!' }}</h1>
+        </header>
+        <main>
+            <p class="content">{{ currentNote.content || 'Schreibe deine Notizen auf...' }}</p>
+        </main>
+    </div>
+    } @else {
+    <div class="no_note_content">
+        <header>
+            <h1>Notiz konnte nicht geladen werden!</h1>
+        </header>
+    </div>
+    }
 </section>

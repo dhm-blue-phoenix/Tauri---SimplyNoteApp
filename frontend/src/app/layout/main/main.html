@@ -4,7 +4,7 @@
             <!-- Notizen Liste -->
             <ul>
                 @for (note of notes(); track note.id) {
-                    <li>
+                    <li (click)="navigate_to_show(note.id)">
                         <div class="note">
                             <span>{{ note.title }}</span>
                         </div>
