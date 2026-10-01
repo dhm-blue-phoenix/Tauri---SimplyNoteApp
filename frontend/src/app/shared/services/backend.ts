@@ -1,6 +1,6 @@
 import { Service, Signal, signal, WritableSignal } from '@angular/core';
 import { environment } from '../../enviroment/enviroment';
-import { Note, Notes, Method, BackendResult, RequestData } from '../interfaces/services/backend';
+import { Note, Notes, Method, BackendResult, RequestData, AddNote } from '../interfaces/services/backend';
 
 
 @Service()
@@ -41,9 +41,36 @@ export class Backend {
         this._note.set(note ?? null);
     }
 
-    public async add_note() {}
+    public async add_note(data: AddNote) {
+            const request_data: RequestData = {
+                method: 'POST',
+                endpoint: 'notes',
+                body: data
+            };
+            const result: BackendResult = await this.request(request_data);
+            console.log('add_note result', result);
+            if (!result['is_ok']) throw new Error(`Backend Error: ${result['status']}`);
+            const created = result['content'];
+            if (created && typeof created === 'object' && 'id' in created) {
+                this._notes.update((items) => [...items, created as Note]);
+            }
+    }
 
-    public async edit_note() {}
+    public async edit_note(id: string, data: Partial<AddNote>) {
+            const request_data: RequestData = {
+                method: 'PATCH',
+                endpoint: 'notes',
+                id: id,
+                body: data
+            };
+            const result: BackendResult = await this.request(request_data);
+            console.log('edit_note result', result);
+            if (!result['is_ok']) throw new Error(`Backend Error: ${result['status']}`);
+            const updated = result['content'];
+            if (updated && typeof updated === 'object' && 'id' in updated) {
+                this._notes.update((items) => items.map((item) => item.id === updated.id ? updated as Note : item));
+            }
+    }
 
     public async delete_note() {}
 
@@ -51,8 +78,12 @@ export class Backend {
         const url: RequestInfo = `${this.url}${request_data['endpoint']}${request_data['id'] ? `/${request_data['id']}` : ''}`;
         try {
             const resp: Response = await fetch(url, this.return_request_data(request_data['method'], request_data['body']));
-            const result: Notes = await resp.json();
-            this._notes.set(result);
+            const result: unknown = await resp.json();
+
+            if (request_data.method === 'GET' && Array.isArray(result)) {
+                this._notes.set(result);
+            }
+
             return {
                 is_ok: resp.ok,
                 status: resp.status,

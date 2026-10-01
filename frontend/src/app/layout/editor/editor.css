@@ -39,5 +39,12 @@ form {
     resize: none;
     border-style: none;
     color: var(--color);
+    margin-top: 8px;
     padding: 8px;
+}
+
+.error {
+    color: brown;
+    font-size: 0.8rem;
+    padding-left: 8px;
 }

@@ -2,6 +2,11 @@ type Endpoint = 'notes';
 
 type Method = 'GET' | 'POST' | 'PATCH' | 'DELETE';
 
+interface AddNote {
+    title: string,
+    content: string
+}
+
 interface RequestData {
     method: Method,
     endpoint: Endpoint,
@@ -34,5 +39,6 @@ export type {
     Endpoint,
     Method,
     BackendResult,
-    RequestData
+    RequestData,
+    AddNote
 };

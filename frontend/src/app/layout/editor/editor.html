@@ -1,10 +1,14 @@
 <section>
-    <form [formGroup]="note_form" (ngSubmit)="on_submit()">
+    <form id="note-form" [formGroup]="note_form" (ngSubmit)="on_submit()">
         <fieldset class="formular">
             <label for="title">
-                <input type="text" name="title" placeholder="Geben Sie ihren Titel ein:" formControlName="title">
-                @if (title?.hasError("minLength")) {
-                <p>Zu Kurz</p>
+                <input id="title" type="text" name="title" placeholder="Titel eingeben:"
+                    formControlName="title">
+                @if (title?.getError('required')) {
+                <p class="error">Bitte geben Sie einen Titel ein</p>
+                }
+                @if (title?.getError('minlength')) {
+                <p class="error">Zu Kurz (min. 5 Zeichen)</p>
                 }
             </label>
             <label for="content">
