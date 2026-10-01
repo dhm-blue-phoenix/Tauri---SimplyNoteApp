@@ -1,0 +1,74 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Frontend: Angular watch",
+            "type": "npm",
+            "script": "start",
+            "options": {
+                "cwd": "${workspaceFolder}/frontend"
+            },
+            "isBackground": true,
+            "problemMatcher": {
+                "owner": "angular",
+                "pattern": {
+                    "regexp": "^$"
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "Application bundle generation started",
+                    "endsPattern": "Local:.*http://localhost:1420/"
+                }
+            },
+            "presentation": {
+                "panel": "dedicated",
+                "group": "dev-servers"
+            }
+        },
+        {
+            "label": "Backend: Rust watch",
+            "type": "process",
+            "command": "cargo",
+            "args": [
+                "watch",
+                "-x",
+                "run"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/backend"
+            },
+            "isBackground": true,
+            "problemMatcher": [
+                "$rustc",
+                {
+                    "owner": "backend-ready",
+                    "pattern": {
+                        "regexp": "^$"
+                    },
+                    "background": {
+                        "activeOnStart": true,
+                        "beginsPattern": "^.*\\[Running 'cargo run'\\].*$",
+                        "endsPattern": "^.*Server leuft auf http.*$"
+                    }
+                }
+            ],
+            "presentation": {
+                "panel": "dedicated",
+                "group": "dev-servers"
+            }
+        },
+        {
+            "label": "Start Frontend + Backend",
+            "dependsOn": [
+                "Frontend: Angular watch",
+                "Backend: Rust watch"
+            ],
+            "dependsOrder": "parallel",
+            "problemMatcher": [],
+            "runOptions": {
+                "runOn": "folderOpen",
+                "instanceLimit": 1
+            }
+        }
+    ]
+}

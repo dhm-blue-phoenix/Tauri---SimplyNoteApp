@@ -1,0 +1,29 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node-terminal",
+            "request": "launch",
+            "name": "Start Frontend",
+            "command": "npm run start",
+            "cwd": "${workspaceFolder}/frontend"
+        },
+        {
+            "type": "node-terminal",
+            "request": "launch",
+            "name": "Start Backend",
+            "command": "cargo watch -x run",
+            "cwd": "${workspaceFolder}/backend"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Start Frontend + Backend",
+            "configurations": [
+                "Start Frontend",
+                "Start Backend"
+            ],
+            "stopAll": true
+        }
+    ]
+}

@@ -9,6 +9,9 @@
 
 # Vscode
 .vscode/*
+!.vscode/launch.json
+!.vscode/tasks.json
+!.vscode/simply-note-app.code-workspace
 .history/*
 
 # System files
