@@ -4,6 +4,8 @@ import { BtnHeader } from '../../shared/components/btn/btn-header/btn-header';
 import { Navigate } from '../../shared/services/navigate';
 import { Switch } from '../../shared/interfaces/services/navigate';
 import { BtnTypes } from '../../shared/interfaces/components/btn';
+import { test } from '../editor/editor';
+
 
 @Component({
     imports: [BtnHeader],
@@ -12,8 +14,9 @@ import { BtnTypes } from '../../shared/interfaces/components/btn';
     templateUrl: './header.html',
 })
 export class Header {
-    private navigate: Navigate = inject(Navigate);
-    public switch: Signal<Switch> = this.navigate.switch;
+    private readonly navigate: Navigate = inject(Navigate);
+    public readonly switch: Signal<Switch> = this.navigate.switch;
+    public readonly save_is_disable: boolean = test;
 
     ngOnInit(): void {
         const switch_value: Signal<Switch> = computed(() => this.switch());
@@ -21,10 +24,14 @@ export class Header {
         this.navigate.set_switch('main', '');
     }
 
-    public navigate_to_main(): void {
-        this.navigate.set_switch('main', '');
+    public to_navigate(value: Switch): void {
+        const state_value: string = value === 'editor' ? history.state['state'] : '';
+        this.navigate.set_switch(value, state_value);
     }
 
+    public save(): void {
+        console.log(test)
+    }
 
     public set_btn(type: BtnTypes): BtnTypes {
         return type;

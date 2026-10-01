@@ -1,17 +1,16 @@
 <section>
-        <form [formGroup]="note_form" (ngSubmit)="on_submit()">
-            <fieldset>
-                <label for="title">
-                <input type="text" name="title" id=""placeholder="Geben Sie ihren Titel ein:" formControlName="title">
-                @if (title?.hasError("required")) {
-                    <p>Pflicht Feld</p>
-                }@else if (title?.hasError("minLength")) {
-                    <p>Zu Kurz</p>
+    <form [formGroup]="note_form" (ngSubmit)="on_submit()">
+        <fieldset class="formular">
+            <label for="title">
+                <input type="text" name="title" placeholder="Geben Sie ihren Titel ein:" formControlName="title">
+                @if (title?.hasError("minLength")) {
+                <p>Zu Kurz</p>
                 }
             </label>
             <label for="content">
-                <textarea name="content" rows="4" placeholder="Schreiben Sie ihre Notizen auf:" formControlName="content"></textarea>
+                <textarea name="content" placeholder="Schreiben Sie ihre Notizen auf:"
+                    formControlName="content"></textarea>
             </label>
-            </fieldset>
-        </form>
+        </fieldset>
+    </form>
 </section>

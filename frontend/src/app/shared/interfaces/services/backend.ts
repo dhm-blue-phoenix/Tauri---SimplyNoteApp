@@ -19,10 +19,10 @@ type NoteStatus = 'notes' | 'trash';
 
 interface Note {
     id: string,
-    title: String,
-    content: String,
+    title: string,
+    content: string,
     status: NoteStatus,
-    created_at: String,
+    created_at: string,
 }
 
 type Notes = Note[];

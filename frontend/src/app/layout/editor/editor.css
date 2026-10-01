@@ -1,6 +1,43 @@
 section {
-    background-color: blue;
     margin-top: 80px;
     padding: 24px 16px;
     height: calc(100vh - 80px);
+}
+
+form {
+    height: 100%;
+}
+
+.formular {
+    padding: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border-style: none;
+}
+
+.formular label input {
+    width: 100%;
+    height: 56px;
+    background-color: transparent;
+    border-style: none;
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--color)
+}
+
+.formular label:last-child {
+    height: 100%;
+}
+
+.formular label textarea {
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    font-size: 1rem;
+    font-weight: bold;
+    resize: none;
+    border-style: none;
+    color: var(--color);
+    padding: 8px;
 }

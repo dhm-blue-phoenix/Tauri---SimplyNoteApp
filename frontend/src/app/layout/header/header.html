@@ -1,25 +1,33 @@
 <section aria-labelledby="header-headline">
     @if (switch() == 'main') {
-        <header>
-            <h1 id="header-headline">Notizen</h1>
-        </header>
-        <main>
-            <app-btn-header [setBtnType]="set_btn('search')"></app-btn-header>
-            <app-btn-header [setBtnType]="set_btn('info')"></app-btn-header>
-        </main>
+    <header>
+        <h1 id="header-headline">Notizen</h1>
+    </header>
+    <main>
+        <app-btn-header [setBtnType]="set_btn('search')"></app-btn-header>
+        <app-btn-header [setBtnType]="set_btn('info')"></app-btn-header>
+    </main>
     } @else if (switch() == 'show') {
-        <header>
-            <app-btn-header [setBtnType]="set_btn('arrow-back')" (click)="navigate_to_main()"></app-btn-header>
-        </header>
-        <main>
+    <header>
+        <button type="button" (click)="to_navigate('main')">
+            <app-btn-header [setBtnType]="set_btn('arrow-back')"></app-btn-header>
+        </button>
+    </header>
+    <main>
+        <button type="button" (click)="to_navigate('editor')">
             <app-btn-header [setBtnType]="set_btn('edit')"></app-btn-header>
-        </main>
+        </button>
+    </main>
     } @else if (switch() == 'editor') {
-        <header>
-            <app-btn-header [setBtnType]="set_btn('arrow-back')" (click)="navigate_to_main()"></app-btn-header>
-        </header>
-        <main>
+    <header>
+        <button type="button" (click)="to_navigate('main')">
+            <app-btn-header [setBtnType]="set_btn('arrow-back')"></app-btn-header>
+        </button>
+    </header>
+    <main>
+        <button type="button" [disabled]="save_is_disable" (click)="save()" class="btn-save">
             <app-btn-header [setBtnType]="set_btn('save')"></app-btn-header>
-        </main>
+        </button>
+    </main>
     }
 </section>
