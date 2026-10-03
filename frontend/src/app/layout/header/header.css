@@ -4,6 +4,7 @@ section {
     background-color: var(--bg-color);
     width: 100vw;
     padding: 16px;
+    padding-top: 32px;
     height: 80px;
 
     display: flex;

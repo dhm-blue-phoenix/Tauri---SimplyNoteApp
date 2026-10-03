@@ -6,7 +6,7 @@ import { Note, Notes, Method, BackendResult, RequestData, AddNote } from '../int
 @Service()
 export class Backend {
     private readonly url: RequestInfo = `${environment['BACKEND_URL']}/api/`;
-    
+
     private readonly _notes: WritableSignal<Notes> = signal<Notes>([]);
     public readonly notes: Signal<Notes> = this._notes.asReadonly();
 
@@ -30,9 +30,9 @@ export class Backend {
             endpoint: 'notes'
         };
         const result: BackendResult = await this.request(request_data);
-        
+
         if (!result['is_ok']) throw new Error(`Backend Error: ${result['status']}`);
-        
+
         return result;
     }
 
@@ -42,37 +42,47 @@ export class Backend {
     }
 
     public async add_note(data: AddNote) {
-            const request_data: RequestData = {
-                method: 'POST',
-                endpoint: 'notes',
-                body: data
-            };
-            const result: BackendResult = await this.request(request_data);
-            console.log('add_note result', result);
-            if (!result['is_ok']) throw new Error(`Backend Error: ${result['status']}`);
-            const created = result['content'];
-            if (created && typeof created === 'object' && 'id' in created) {
-                this._notes.update((items) => [...items, created as Note]);
-            }
+        const request_data: RequestData = {
+            method: 'POST',
+            endpoint: 'notes',
+            body: data
+        };
+        const result: BackendResult = await this.request(request_data);
+        console.log('add_note result', result);
+        if (!result['is_ok']) throw new Error(`Backend Error: ${result['status']}`);
+        const created = result['content'];
+        if (created && typeof created === 'object' && 'id' in created) {
+            this._notes.update((items) => [...items, created as Note]);
+        }
     }
 
     public async edit_note(id: string, data: Partial<AddNote>) {
-            const request_data: RequestData = {
-                method: 'PATCH',
-                endpoint: 'notes',
-                id: id,
-                body: data
-            };
-            const result: BackendResult = await this.request(request_data);
-            console.log('edit_note result', result);
-            if (!result['is_ok']) throw new Error(`Backend Error: ${result['status']}`);
-            const updated = result['content'];
-            if (updated && typeof updated === 'object' && 'id' in updated) {
-                this._notes.update((items) => items.map((item) => item.id === updated.id ? updated as Note : item));
-            }
+        const request_data: RequestData = {
+            method: 'PATCH',
+            endpoint: 'notes',
+            id: id,
+            body: data
+        };
+        const result: BackendResult = await this.request(request_data);
+        console.log('edit_note result', result);
+        if (!result['is_ok']) throw new Error(`Backend Error: ${result['status']}`);
+        const updated = result['content'];
+        if (updated && typeof updated === 'object' && 'id' in updated) {
+            this._notes.update((items) => items.map((item) => item.id === updated.id ? updated as Note : item));
+        }
     }
 
-    public async delete_note() {}
+    public async delete_note(id: string) {
+        const request_data: RequestData = {
+            method: 'DELETE',
+            endpoint: 'notes',
+            id: id
+        };
+        const result: BackendResult = await this.request(request_data);
+        console.log('delete_note result', result);
+        if (!result['is_ok']) throw new Error(`Backend Error: ${result['status']}`);
+        this._notes.update((items) => items.filter((item) => item.id !== id));
+    }
 
     private async request(request_data: RequestData): Promise<BackendResult> {
         const url: RequestInfo = `${this.url}${request_data['endpoint']}${request_data['id'] ? `/${request_data['id']}` : ''}`;

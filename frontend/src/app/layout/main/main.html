@@ -1,22 +1,33 @@
 <section>
     @if (notes().length > 1) {
-        <div>
-            <!-- Notizen Liste -->
-            <ul>
-                @for (note of notes(); track note.id) {
-                    <li (click)="navigate_to_show(note.id)">
-                        <div class="note">
-                            <span>{{ note.title }}</span>
-                        </div>
-                    </li>
-                }
-            </ul>
-        </div>
+    <div>
+        <!-- Notizen Liste -->
+        <ul>
+            @for (note of notes(); track note.id) {
+            <li (contextmenu)="open_context_menu($event, note.id)">
+                <div class="note">
+                    <div class="note__content">
+                        <button class="note__buttons note__buttons--hover" (click)="navigate_to_show(note.id)">
+                            <span class="note__buttons__text">{{ note.title }}</span>
+                        </button>
+                    </div>
+                    @if (openTrash) {
+                    <div class="note__content">
+                        <button class="note__buttons note__buttons--hover" (click)="delete_note(note.id)">
+                            <span class="note__buttons__text">Löschen</span>
+                        </button>
+                    </div>
+                    }
+                </div>
+            </li>
+            }
+        </ul>
+    </div>
     } @else {
-        <div class="firstNotiz">
-            <!-- Leere Notitzen Liste -->
-            <span>Erstelle deine Erste Notiz!</span>
-        </div>
+    <div class="note__empty">
+        <!-- Leere Notitzen Liste -->
+        <span>Erstelle deine Erste Notiz!</span>
+    </div>
     }
     <app-btn-add></app-btn-add>
 </section>

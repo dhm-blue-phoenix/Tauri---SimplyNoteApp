@@ -14,7 +14,11 @@ pub fn router() -> Router<AppState> {
         .fallback(fallback)
         .layer(
             CorsLayer::new()
-                .allow_origin(HeaderValue::from_static("http://100.110.167.27:1420"))
+                .allow_origin([
+                    HeaderValue::from_static("http://100.110.167.27:1420"),
+                    HeaderValue::from_static("http://localhost:1420"),
+                    HeaderValue::from_static("http://tauri.localhost"),
+                ])
                 .allow_methods([Method::GET, Method::POST, Method::PATCH, Method::DELETE])
                 .allow_headers([header::CONTENT_TYPE]),
         )

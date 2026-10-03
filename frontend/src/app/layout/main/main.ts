@@ -14,6 +14,7 @@ export class Main {
     private backend: Backend = inject(Backend);
     private navigate: Navigate = inject(Navigate);
     public notes: Signal<[] | Notes> = this.backend.notes;
+    public openTrash: boolean = false;
 
     async ngOnInit(): Promise<void> {
         await this.backend.load_notes();
@@ -23,5 +24,14 @@ export class Main {
 
     public navigate_to_show(id: string): void {
         this.navigate.set_switch('show', id);
+    }
+
+    public open_context_menu(event: MouseEvent, noteId: string): void {
+        event.preventDefault();
+        this.openTrash = !this.openTrash;
+    }
+
+    public delete_note(noteId: string): void {
+        this.backend.delete_note(noteId);
     }
 }
