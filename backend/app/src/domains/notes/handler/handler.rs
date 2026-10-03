@@ -1,5 +1,5 @@
-use super::super::models::{DtoNote, DtoNotePatch, DtoNotePost, DtoNotes};
-use super::super::service::{add, edit, find, list};
+use super::super::models::{DtoNote, DtoNotePatch, DtoNotePost, DtoNotes, DtoNoteDelete};
+use super::super::service::{add, edit, find, list, remove};
 use crate::core::{ApiError, ApiResult, ApiResultJson, AppState as CoreState};
 use crate::domains::notes::models::{DbNoteInsert, DbNoteUpdate};
 use axum::Json;
@@ -61,4 +61,13 @@ pub async fn patch_note(
     Ok((StatusCode::OK, Json(note)))
 }
 
-pub async fn delete_note() {}
+pub async fn delete_note(
+    State(state): State<CoreState>,
+    Path(id): Path<String>,
+) -> ApiResultJson<DtoNoteDelete> {
+    let pool: &SqlitePool = &state.db;
+    let id: &str = id.trim();
+
+    let result: DtoNoteDelete = remove(pool, id).await?;
+    Ok((StatusCode::OK, Json(result)))
+}

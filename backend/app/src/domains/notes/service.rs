@@ -1,8 +1,10 @@
+use std::result;
+
 use sqlx::SqlitePool;
 
-use super::db::{find_all, find_by_id, insert, update};
+use super::db::{find_all, find_by_id, insert, update, delete};
 use super::models::{
-    DbNote, DbNoteInsert, DbNoteUpdate, DbNotes, DtoNote, DtoNotePost, DtoNotes, NoteStatus,
+    DbNote, DbNoteInsert, DbNoteUpdate, DbNotes, DtoNote, DtoNotePost, DtoNotes, NoteStatus, DbNoteDelete, DtoNoteDelete
 };
 use crate::core::{ApiError, ApiResult};
 
@@ -51,7 +53,17 @@ pub async fn edit(pool: &SqlitePool, data: DbNoteUpdate) -> ApiResult<DtoNote> {
     Ok(dto_data)
 }
 
-pub async fn delete() {}
+pub async fn remove(pool: &SqlitePool, id: &str) -> ApiResult<DtoNoteDelete> {
+    if id.len() != 36 {
+        return Err(ApiError::InvalidInput("Ungültige ID".to_string()));
+    }
+    
+    let dto_data: DbNoteDelete = delete(pool, id).await?;
+    let result: DtoNoteDelete = DtoNoteDelete {
+        id: dto_data.id,
+    };
+    Ok(result)
+}
 
 fn format_dto_model(db_data: DbNote) -> DtoNote {
     DtoNote {

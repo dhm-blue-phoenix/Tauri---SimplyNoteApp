@@ -27,3 +27,8 @@ pub struct DbNoteUpdate {
     pub title: Option<String>,
     pub content: Option<String>,
 }
+
+#[derive(Debug, FromRow)]
+pub struct DbNoteDelete {
+    pub id: String,
+}

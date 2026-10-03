@@ -27,3 +27,8 @@ pub struct DtoNotePatch {
     pub title: Option<String>,
     pub content: Option<String>,
 }
+
+#[derive(Debug, Serialize)]
+pub struct DtoNoteDelete {
+    pub id: String,
+}

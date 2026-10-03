@@ -1,7 +1,6 @@
-use super::super::models::{DbNote, DbNoteInsert, DbNotes};
+use super::super::models::{DbNote, DbNoteInsert, DbNotes, DbNoteUpdate, DbNoteDelete};
 use crate::core::ApiResult;
-use crate::domains::notes::models::DbNoteUpdate;
-use sqlx::{FromRow, SqlitePool};
+use sqlx::{SqlitePool};
 use uuid::Uuid;
 
 pub async fn find_all(pool: &SqlitePool) -> ApiResult<DbNotes> {
@@ -58,20 +57,15 @@ pub async fn update(pool: &SqlitePool, data: DbNoteUpdate) -> ApiResult<DbNote> 
     Ok(result)
 }
 
-#[derive(FromRow, Debug)]
-struct DB_RESULT_DELETE {
-    id: Uuid,
-}
-
-pub async fn delete(pool: &SqlitePool, id: &str) -> ApiResult<bool> {
+pub async fn delete(pool: &SqlitePool, id: &str) -> ApiResult<DbNoteDelete> {
     let sql: &str = "DELETE FROM notes WHERE id = ? RETURNING id";
-    let result: DB_RESULT_DELETE = sqlx::query_as::<_, DB_RESULT_DELETE>(sql)
+    let result: DbNoteDelete = sqlx::query_as::<_, DbNoteDelete>(sql)
         .bind(&id)
         .fetch_one(pool)
         .await?;
 
     println!("TESTING: DELETE {:?}", result);
-    println!("TESTING: DELETE ID != DEFAULD {:?}", result.id != Uuid::default());
+    println!("TESTING: DELETE ID != DEFAULD {:?}", result.id);
 
-    Ok(result.id != Uuid::default())
+    Ok(result)
 }
