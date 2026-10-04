@@ -15,7 +15,7 @@ pub fn router() -> Router<AppState> {
         .layer(
             CorsLayer::new()
                 .allow_origin([
-                    HeaderValue::from_static("http://100.110.167.27:1420"),
+                    HeaderValue::from_static("http://0.0.0.0:1420"),
                     HeaderValue::from_static("http://localhost:1420"),
                 ])
                 .allow_methods([Method::GET, Method::POST, Method::PATCH, Method::DELETE])
