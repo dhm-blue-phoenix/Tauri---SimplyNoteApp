@@ -9,7 +9,7 @@ use crate::core::{Environment, init_state};
 
 #[tokio::main]
 async fn main() {
-    dotenv().expect(".env Datei konnte nicht geladen werden!");
+    let _ = dotenv();
     let config: Environment = Environment::load();
 
     let app: Router = core::router().with_state(init_state(&config.db_url).await);

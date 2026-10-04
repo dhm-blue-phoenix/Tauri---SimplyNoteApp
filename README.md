@@ -180,7 +180,34 @@ npm run ios:build:device
 ```
 
 `dev` und `run` starten die Desktop-App im Entwicklungsmodus. Für Android und iOS sind `*:dev` und `*:run` Startbefehle; `*:build` erstellt den jeweiligen Build. iOS-Geräte-Builds benötigen eine passende Xcode-Signierung.
+
+### Docker und Podman
+
+Die Dateien für Container liegen im Ordner `containers/`, der neben `app/`, `backend/` und `frontend/` liegt. Docker und Podman verwenden dieselbe Compose-Datei. Auf macOS muss bei Podman zuerst die VM gestartet werden (`podman machine start`); für `podman compose` muss ein Compose-Provider installiert sein.
+
+Podman:
+
+```bash
+podman compose -f containers/compose.yaml up --build
 ```
+
+Docker:
+
+```bash
+docker compose -f containers/compose.yaml up --build
+```
+
+Danach ist das Web-Frontend unter `http://localhost:8080` erreichbar. Nginx liefert Angular aus und leitet `/api/` an das Rust-Backend weiter. Das Backend ist nicht direkt nach außen veröffentlicht.
+
+Die Datenbank bleibt SQLite. SQLite ist eine Datei und kein eigener Datenbankserver, daher läuft dafür kein separater Container. Compose bindet ein benanntes Volume ein, damit `/data/simply-note.db` Neustarts überlebt. Das Schema wird beim Backend-Start erstellt; die Dummy-Migration wird absichtlich nicht ausgeführt.
+
+Beenden:
+
+```bash
+podman compose -f containers/compose.yaml down
+```
+
+Für Docker den Befehl mit `docker compose` ausführen. Das Volume nicht mit `down --volumes` entfernen, außer die gespeicherten Notizen sollen gelöscht werden.
 
 Rust-Backend separat prüfen:
 
@@ -202,6 +229,12 @@ cargo check
 |       |-- commands.ps1
 |       |-- options.ps1
 |       `-- start.ps1
+|-- containers/       Container-Konfiguration für Docker und Podman
+|   |-- backend.Dockerfile
+|   |-- backend-entrypoint.sh
+|   |-- compose.yaml
+|   |-- frontend.Dockerfile
+|   `-- frontend.nginx.conf
 |-- app/              Tauri-Anwendung
 |-- backend/          separates Rust-Backend
 |-- frontend/         Angular-Anwendung
@@ -214,5 +247,15 @@ cargo check
 
 - Frontend: Angular 22
 - Desktop-App: Tauri 2
+- Backend: Rust, Axum und SQLite
+- Container: Web-Frontend und Backend; SQLite-Daten bleiben in einem Volume erhalten
 - Frontend-Abhängigkeiten: `frontend/package.json` und `frontend/package-lock.json`  
 - Rust-Code: Tauri-Code unter `app/src` sowie ein separates Backend unter `backend`
+
+## Was noch offen ist
+
+- Die aktuelle Notes-API hat noch keine Benutzerkonten oder Authentifizierung.
+- Backups und Wiederherstellung des SQLite-Volumes sind noch nicht automatisiert.
+- `npm ci` meldet derzeit fünf Abhängigkeitsschwachstellen (zwei moderate, eine hohe, zwei kritische); sie müssen geprüft und gezielt behoben werden.
+- Für einen öffentlichen Produktivbetrieb fehlen HTTPS/TLS, ein abgesichertes Deployment und ein dokumentierter Upgrade-/Migrationsablauf.
+- Android- und iOS-Builds müssen noch auf echten Zielgeräten inklusive Signierung abschließend getestet werden.

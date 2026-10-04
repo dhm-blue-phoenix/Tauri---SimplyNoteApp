@@ -1,0 +1,29 @@
+services:
+  backend:
+    build:
+      context: ..
+      dockerfile: containers/backend.Dockerfile
+    environment:
+      DATABASE_URL: sqlite:///data/simply-note.db
+      DB_PATH: /data/simply-note.db
+      IP_ADDR: 0.0.0.0
+      PORT: "9964"
+    volumes:
+      - sqlite-data:/data
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://127.0.0.1:9964/ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  frontend:
+    build:
+      context: ..
+      dockerfile: containers/frontend.Dockerfile
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"
+
+volumes:
+  sqlite-data:
