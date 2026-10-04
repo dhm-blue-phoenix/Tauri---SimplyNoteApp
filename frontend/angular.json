@@ -54,22 +54,10 @@
               "sourceMap": true
             },
             "container": {
-              "fileReplacements": [
-                {
-                  "replace": "src/app/enviroment/enviroment.ts",
-                  "with": "src/app/enviroment/enviroment.docker.ts"
-                }
-              ],
               "optimization": true,
               "outputHashing": "all"
             },
             "container-development": {
-              "fileReplacements": [
-                {
-                  "replace": "src/app/enviroment/enviroment.ts",
-                  "with": "src/app/enviroment/enviroment.docker.ts"
-                }
-              ],
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
@@ -88,7 +76,8 @@
               "buildTarget": "simply-note-app:build:production"
             },
             "development": {
-              "buildTarget": "simply-note-app:build:development"
+              "buildTarget": "simply-note-app:build:development",
+              "proxyConfig": "proxy.conf.json"
             },
             "container-development": {
               "buildTarget": "simply-note-app:build:container-development",

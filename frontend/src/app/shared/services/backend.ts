@@ -1,11 +1,10 @@
 import { Service, Signal, signal, WritableSignal } from '@angular/core';
-import { environment } from '../../enviroment/enviroment';
 import { Note, Notes, Method, BackendResult, RequestData, AddNote } from '../interfaces/services/backend';
 
 
 @Service()
 export class Backend {
-    private readonly url: RequestInfo = `${environment['BACKEND_URL']}/api/`;
+    private readonly url: RequestInfo = '/api/';
 
     private readonly _notes: WritableSignal<Notes> = signal<Notes>([]);
     public readonly notes: Signal<Notes> = this._notes.asReadonly();

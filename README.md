@@ -183,7 +183,7 @@ npm run ios:build:device
 
 ### Entwicklung mit Podman oder Docker
 
-Die Entwicklungscontainer mounten den Quellcode: Angular lädt Änderungen automatisch neu, Rust wird mit `cargo watch` neu gestartet. SQLite liegt in einem benannten Volume. Die Dateien liegen in `containers/`, neben `app/`, `backend/` und `frontend/`.
+Die Entwicklungscontainer mounten den Quellcode: Angular lädt Änderungen automatisch neu, Rust wird mit `cargo watch` neu gestartet. SQLite liegt in einem benannten Volume. Die Dateien liegen in `containers/`, neben `app/`, `backend/` und `frontend/`. Die API verwendet relative `/api`-Requests und benötigt für den Dev-Stack keine Angular-Environment-Dateien.
 
 Auf macOS zuerst die lokale Podman-VM starten und dann den Dev-Stack ausführen:
 
@@ -198,7 +198,7 @@ Für Docker:
 docker compose -f containers/compose.dev.yaml up --build
 ```
 
-Das Dev-Frontend ist unter `http://localhost:1420` erreichbar; das Backend unter `http://localhost:9964`. Angular leitet `/api/` intern an den Backend-Container weiter. Podman benötigt einen installierten Compose-Provider für `podman compose`.
+Das Dev-Frontend ist unter `http://localhost:1420` erreichbar; das Backend unter `http://localhost:9964`. `frontend/proxy.container.json` leitet `/api/` intern an den Compose-Service `backend` weiter. Für normale lokale Angular-/Tauri-Entwicklung leitet `frontend/proxy.conf.json` dieselben Requests an `localhost:9964` weiter. Podman benötigt einen installierten Compose-Provider für `podman compose`.
 
 Tauri startet standardmäßig selbst einen Frontend-Dev-Server. Wenn der Container bereits Port 1420 belegt, kann Tauri die bestehende URL verwenden, ohne den Server erneut zu starten:
 
