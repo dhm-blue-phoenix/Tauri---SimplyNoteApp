@@ -181,30 +181,38 @@ npm run ios:build:device
 
 `dev` und `run` starten die Desktop-App im Entwicklungsmodus. Für Android und iOS sind `*:dev` und `*:run` Startbefehle; `*:build` erstellt den jeweiligen Build. iOS-Geräte-Builds benötigen eine passende Xcode-Signierung.
 
-### Docker und Podman
+### Entwicklung mit Podman oder Docker
 
-Die Dateien für Container liegen im Ordner `containers/`, der neben `app/`, `backend/` und `frontend/` liegt. Docker und Podman verwenden dieselbe Compose-Datei. Auf macOS muss bei Podman zuerst die VM gestartet werden (`podman machine start`); für `podman compose` muss ein Compose-Provider installiert sein.
+Die Entwicklungscontainer mounten den Quellcode: Angular lädt Änderungen automatisch neu, Rust wird mit `cargo watch` neu gestartet. SQLite liegt in einem benannten Volume. Die Dateien liegen in `containers/`, neben `app/`, `backend/` und `frontend/`.
 
-Podman:
+Auf macOS zuerst die lokale Podman-VM starten und dann den Dev-Stack ausführen:
 
 ```bash
-podman compose -f containers/compose.yaml up --build
+podman machine start
+podman compose -f containers/compose.dev.yaml up --build
 ```
 
-Docker:
+Für Docker:
 
 ```bash
-docker compose -f containers/compose.yaml up --build
+docker compose -f containers/compose.dev.yaml up --build
 ```
 
-Danach ist das Web-Frontend unter `http://localhost:8080` erreichbar. Nginx liefert Angular aus und leitet `/api/` an das Rust-Backend weiter. Das Backend ist nicht direkt nach außen veröffentlicht.
+Das Dev-Frontend ist unter `http://localhost:1420` erreichbar; das Backend unter `http://localhost:9964`. Angular leitet `/api/` intern an den Backend-Container weiter. Podman benötigt einen installierten Compose-Provider für `podman compose`.
 
-Die Datenbank bleibt SQLite. SQLite ist eine Datei und kein eigener Datenbankserver, daher läuft dafür kein separater Container. Compose bindet ein benanntes Volume ein, damit `/data/simply-note.db` Neustarts überlebt. Das Schema wird beim Backend-Start erstellt; die Dummy-Migration wird absichtlich nicht ausgeführt.
-
-Beenden:
+Tauri startet standardmäßig selbst einen Frontend-Dev-Server. Wenn der Container bereits Port 1420 belegt, kann Tauri die bestehende URL verwenden, ohne den Server erneut zu starten:
 
 ```bash
-podman compose -f containers/compose.yaml down
+cd app
+npm run tauri -- dev --config '{"build":{"beforeDevCommand":""}}'
+```
+
+`containers/compose.yaml` baut weiterhin eine optimierte Webvorschau mit Nginx auf Port 8080. Sie ist nicht der geplante Produktionsweg; ausgeliefert werden soll später die Tauri-App, während das Backend separat als Service betrieben wird. Die Podman-VM auf macOS ist nur die lokale Linux-Laufzeit. OCI-Container-Images lassen sich auf einem geeigneten Server betreiben, aber die VM selbst ist kein Produktionsserver.
+
+Dev-Stack beenden:
+
+```bash
+podman compose -f containers/compose.dev.yaml down
 ```
 
 Für Docker den Befehl mit `docker compose` ausführen. Das Volume nicht mit `down --volumes` entfernen, außer die gespeicherten Notizen sollen gelöscht werden.
@@ -231,9 +239,13 @@ cargo check
 |       `-- start.ps1
 |-- containers/       Container-Konfiguration für Docker und Podman
 |   |-- backend.Dockerfile
+|   |-- backend-dev.Dockerfile
+|   |-- backend-dev-entrypoint.sh
 |   |-- backend-entrypoint.sh
 |   |-- compose.yaml
+|   |-- compose.dev.yaml
 |   |-- frontend.Dockerfile
+|   |-- frontend-dev.Dockerfile
 |   `-- frontend.nginx.conf
 |-- app/              Tauri-Anwendung
 |-- backend/          separates Rust-Backend
@@ -248,7 +260,8 @@ cargo check
 - Frontend: Angular 22
 - Desktop-App: Tauri 2
 - Backend: Rust, Axum und SQLite
-- Container: Web-Frontend und Backend; SQLite-Daten bleiben in einem Volume erhalten
+- Entwicklung: Angular und Rust laufen in Containern mit Live-Reload; SQLite-Daten bleiben in einem Volume erhalten
+- Webvorschau: optionaler optimierter Angular-/Nginx-Container, nicht der geplante Tauri-Releaseweg
 - Frontend-Abhängigkeiten: `frontend/package.json` und `frontend/package-lock.json`  
 - Rust-Code: Tauri-Code unter `app/src` sowie ein separates Backend unter `backend`
 

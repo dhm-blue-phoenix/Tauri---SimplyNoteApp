@@ -62,6 +62,17 @@
               ],
               "optimization": true,
               "outputHashing": "all"
+            },
+            "container-development": {
+              "fileReplacements": [
+                {
+                  "replace": "src/app/enviroment/enviroment.ts",
+                  "with": "src/app/enviroment/enviroment.docker.ts"
+                }
+              ],
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
             }
           },
           "defaultConfiguration": "production"
@@ -78,6 +89,10 @@
             },
             "development": {
               "buildTarget": "simply-note-app:build:development"
+            },
+            "container-development": {
+              "buildTarget": "simply-note-app:build:container-development",
+              "proxyConfig": "proxy.container.json"
             }
           },
           "defaultConfiguration": "development"

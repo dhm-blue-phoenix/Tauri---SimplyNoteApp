@@ -1,0 +1,43 @@
+services:
+  backend:
+    build:
+      context: ..
+      dockerfile: containers/backend-dev.Dockerfile
+    command: ["cargo", "watch", "--poll", "-w", "app/src", "-w", "app/migrations", "-x", "run -p app"]
+    environment:
+      DATABASE_URL: sqlite:///data/simply-note.db
+      DB_PATH: /data/simply-note.db
+      IP_ADDR: 0.0.0.0
+      PORT: "9964"
+    volumes:
+      - ../backend:/workspace/backend
+      - cargo-registry:/usr/local/cargo/registry
+      - cargo-target:/workspace/backend/target
+      - sqlite-data:/data
+    ports:
+      - "9964:9964"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://127.0.0.1:9964/ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  frontend:
+    build:
+      context: ..
+      dockerfile: containers/frontend-dev.Dockerfile
+    command: ["sh", "-c", "npm ci && npm run start -- --configuration container-development"]
+    depends_on:
+      backend:
+        condition: service_healthy
+    volumes:
+      - ../frontend:/workspace/frontend
+      - frontend-node-modules:/workspace/frontend/node_modules
+    ports:
+      - "1420:1420"
+
+volumes:
+  cargo-registry:
+  cargo-target:
+  frontend-node-modules:
+  sqlite-data:
