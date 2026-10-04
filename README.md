@@ -119,7 +119,67 @@ Tauri-Entwicklung:
 
 ```bash
 cd app
-npm run tauri -- dev
+npm run dev
+```
+
+Tauri-Desktop-Build:
+
+```bash
+cd app
+npm run build
+```
+
+### Android und iOS
+
+Die Mobile-Projekte werden einmalig initialisiert:
+
+```bash
+cd app
+npm run android:init
+npm run ios:init
+```
+
+Verfügbare Simulatoren und Geräte anzeigen:
+
+```bash
+npm run android:devices
+npm run ios:devices
+```
+
+Zum Starten einen Gerätenamen beziehungsweise die Android-Seriennummer aus der Liste übergeben:
+
+```bash
+npm run android:run -- emulator-5554
+npm run ios:run -- "iPhone 17"
+```
+
+Für ein physisches Gerät:
+
+```bash
+npm run android:run:device -- <ANDROID-SERIENNUMMER> --host
+npm run ios:run:device -- "iPhone-Name" --host
+```
+
+Die Android-Seriennummer steht in der Ausgabe von `npm run android:devices`. Das Handy muss verbunden und entsperrt sein; Android muss USB-Debugging erlauben. Ohne das Geräteargument kann Tauri weiterhin den Emulator auswählen. `--host` sorgt nur für die Netzwerkverbindung zum Dev-Server, es wählt kein Gerät aus.
+
+Alternativ kann der volle Tauri-Befehl verwendet werden:
+
+```bash
+npm run tauri -- android dev emulator-5554 --host
+npm run tauri -- ios dev "Blue's iPhone" --host
+```
+
+`--host` verbindet die App über das Netzwerk mit dem Angular-Dev-Server. Handy und Entwicklungsrechner müssen einander erreichen können. Der Dev-Server lauscht dafür auf allen Netzwerkschnittstellen; nur in vertrauenswürdigen Netzwerken entwickeln.
+
+Mobile Builds:
+
+```bash
+npm run android:build
+npm run ios:build:simulator
+npm run ios:build:device
+```
+
+`dev` und `run` starten die Desktop-App im Entwicklungsmodus. Für Android und iOS sind `*:dev` und `*:run` Startbefehle; `*:build` erstellt den jeweiligen Build. iOS-Geräte-Builds benötigen eine passende Xcode-Signierung.
 ```
 
 Rust-Backend separat prüfen:
