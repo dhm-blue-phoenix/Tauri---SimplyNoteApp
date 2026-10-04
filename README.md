@@ -198,7 +198,31 @@ Für Docker:
 docker compose -f containers/compose.dev.yaml up --build
 ```
 
+Nur das Backend starten:
+
+```bash
+podman compose -f containers/compose.dev.yaml up --build backend
+```
+
+Nur das Frontend starten, ohne Compose-Abhängigkeiten mitzustarten:
+
+```bash
+podman compose -f containers/compose.dev.yaml up --build --no-deps frontend
+```
+
+Beim Einzelstart des Frontends muss das Backend separat laufen, sonst laden zwar Angular-Seiten, aber API-Aufrufe schlagen fehl. Für Docker dieselben Befehle mit `docker compose` ausführen.
+
 Das Dev-Frontend ist unter `http://localhost:1420` erreichbar; das Backend unter `http://localhost:9964`. `frontend/proxy.container.json` leitet `/api/` intern an den Compose-Service `backend` weiter. Für normale lokale Angular-/Tauri-Entwicklung leitet `frontend/proxy.conf.json` dieselben Requests an `localhost:9964` weiter. Podman benötigt einen installierten Compose-Provider für `podman compose`.
+
+Logs in einem zweiten Terminal verfolgen:
+
+```bash
+podman compose -f containers/compose.dev.yaml logs -f
+podman compose -f containers/compose.dev.yaml logs -f frontend
+podman compose -f containers/compose.dev.yaml logs -f backend
+```
+
+Der erste Befehl zeigt beide Container; die anderen filtern auf einen Service. Mit `Ctrl+C` beendest du nur die Log-Anzeige. Bei einem direkt angehängten `up`-Befehl stoppt `Ctrl+C` dagegen den Stack. Für Docker `podman compose` durch `docker compose` ersetzen.
 
 Tauri startet standardmäßig selbst einen Frontend-Dev-Server. Wenn der Container bereits Port 1420 belegt, kann Tauri die bestehende URL verwenden, ohne den Server erneut zu starten:
 
